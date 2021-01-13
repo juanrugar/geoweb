@@ -33,6 +33,31 @@
                 attribution : "OSM"
                 });
                 capa1.addTo(map);
+                //Adding a single point marker to the map with a popup on it
+                L.marker([41.3954, 2.16859]).addTo(map).bindPopup('Comença aquí!');   
+                //Adding a single point marker to the map and a default opened popup
+                L.marker([41.4042, 2.10788]).addTo(map).bindPopup('Acaba aquí!').openPopup();   
+                //adding a point with some geometrical options (vector)
+                var punto = L.circleMarker([39.4042, -1.1088], {
+                            color:'#ff00ff',
+                            fillColor: '#00ff00',
+                            fillOpacity: 0.5,
+                            radius:8
+                            });
+                punto.addTo(map);
+                punto.bindPopup('Soc ací!');
+                punto.openPopup();
+                //add EVENT: add point when clicking on the map
+                map.on('click', function (e) {
+                    new L.circleMarker(e.latlng, {
+                        color:'#00ff00',
+                        fillColor: '#ff0000',
+                        fillOpacity: 0.8,
+                        radius:6
+                    }).addTo(map)
+                        .bindPopup(e.latlng.lat+', '+e.latlng.lng)
+                        .openPopup();
+                });
             }
         </script>
     </head>
