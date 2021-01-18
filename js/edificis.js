@@ -44,7 +44,7 @@ function addEdificiosCapa() {
             "fill-extrusion-opacity": 0.9
         }
     },
-        "road-label"
+        "road-label-simple"
     );
 
 } //fin funcion
