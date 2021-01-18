@@ -44,7 +44,7 @@ function addEdificiosCapa() {
             "fill-extrusion-opacity": 0.9
         }
     },
-        "road-label-simple"
+        "road-label"
     );
 
 } //fin funcion
@@ -122,3 +122,4 @@ function addPopupToMapEdificios(nombreCapa) {
     });
 
 }
+

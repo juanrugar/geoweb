@@ -11,7 +11,7 @@
     <link href='css/estilobase.css' rel='stylesheet' />
     
     <script src='js/edificis.js'></script>
-    <script src='js/3d.js'></script>
+    <script src='js/3d.js'></script> 
     <script>
         //Añadir vuestor token y/o estilo !!
         var map;
@@ -46,8 +46,7 @@
 
                 addPopupToMapEdificios("edificios");
 
-                add3D();
-
+                
              }); //fin onload
 
         } // final init
@@ -66,7 +65,7 @@
         <hr>
         <input id="textos" onChange="verTextos(this.checked)" type="checkbox" checked>Ver topónimos
         <hr>
-        <input id="textos" onChange="ver3D(this.checked)" type="checkbox" checked>Ver 3D
+        <input id="3d" onChange="ver3D(this.checked)" type="checkbox" checked>Ver 3D
     </div>
     <div id="map"></div>
 </body>
