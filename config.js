@@ -57,6 +57,42 @@ var config = {
             callback: '',
             onChapterEnter: [],
             onChapterExit: []
+        }, {
+            id: 'volcan3',
+            alignment: 'left',
+            hidden: false,
+            title: 'Popocatépetl, México',
+            image: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Mexico-Popocatepetl.jpg',
+            description: 'Es un volcán activo localizado en el centro de México. Se encuentra en los límites territoriales de los estados de Morelos, Puebla y el estado de México. Se localiza unos 72 km al sureste de la Ciudad de México, a 43 km de Puebla, a 63 km de Cuernavaca, y a 53 km de Tlaxcala.',
+            location: {
+                center: [-98.62176, 19.02104],
+                zoom: 14.45,
+                pitch: 54,
+                bearing: 0
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: true,
+            callback: '',
+            onChapterEnter: [],
+            onChapterExit: []
+        }, {
+            id: 'volcan4',
+            alignment: 'right',
+            hidden: false,
+            title: 'Volcán de Fuego, Guetamala',
+            image: 'https://upload.wikimedia.org/wikipedia/commons/a/a8/Fuego_Eruption.jpg',
+            description: 'El volcán de Fuego es a lo que se le conoce como un estratovolcán activo situado entre los departamentos de Sacatepéquez, Escuintla y Chimaltenango, al centro-sur de Guatemala. El volcán de Fuego es el volcán más activo de Centroamérica y uno de los más activos del mundo. Su nombre indígena es Chi gag, que se traduciría del idioma cakchiquel como <q>donde está el fuego</q>. El volcán de Fuego tiene una altura de 3763 m de altitud, quedando libre de vegetación a partir de los 1300 m.',
+            location: {
+                center: [-90.880833, 14.474722],
+                zoom: 14.45,
+                pitch: 54,
+                bearing: 0
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: true,
+            callback: '',
+            onChapterEnter: [],
+            onChapterExit: []
         }
     ]
 };
