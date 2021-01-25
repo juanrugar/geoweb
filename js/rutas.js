@@ -24,8 +24,23 @@ function zoomToRutas(valores) {
     var coord = valores.split("/");
 
     map.flyTo({
-            center: [coord[2], coord[1]],
-            zoom: coord[0]
-        });
+        center: [coord[2], coord[1]],
+        zoom: coord[0]
+    });
 
-    } //fin funcion
+} //fin funcion
+
+var animacion;
+function rotarCamara(timestamp) {
+
+    rotacion = timestamp / 100 == 360 ? 0 : timestamp / 100;
+    map.rotateTo(rotacion, { duration: 0 });
+
+    animacion = requestAnimationFrame(rotarCamara);
+}
+
+
+function finalRotarCamara() {
+
+    cancelAnimationFrame(animacion);
+}   
