@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>Topográfico</title>
+    <title>Mi mapa básico</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
@@ -12,7 +12,7 @@
             mapboxgl.accessToken ='pk.eyJ1IjoianVhbnJ1Z2FyIiwiYSI6ImNranlpd2lqbzB5djQydW1sZTRvem9tdmgifQ.zvNvGIYji6wVpwjlnTHeJg';
             var map = new mapboxgl.Map({
                 container: 'map',
-                style: 'https://geoserveis.icgc.cat/contextmaps/icgc.json',
+                style: 'https://juanrugar.github.io/geoweb/datos/miestilo.json',
                 center: [2.16859, 41.3954],
                 zoom: 13,
                 hash: true,
@@ -24,6 +24,26 @@
             }));
             map.addControl(new mapboxgl.NavigationControl());
 
+            map.on('load', function () {
+                map.addSource("carrils-bici", {
+                    type: "geojson",
+                    data: "datos/carrils-bici.geojson"
+                }); //fin map source
+
+                map.addLayer({
+                    id: "carrils-bici-layer",
+                    type: "line",
+                    source: "carrils-bici",
+                    layout: {
+                        "line-join": "round",
+                        "line-cap": "round"
+                    },
+                    paint: {
+                        "line-color": "#FF0000",
+                        "line-width": 8
+                    }
+                }); //fin add layers
+            }); //Fin load mapa
 
         }
     </script>
