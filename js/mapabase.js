@@ -1,4 +1,4 @@
-var map, osm, controlCapas;
+var map, osm, controlCapas, osmGeocoder;
 
 function init() {
     map = L.map('map', {
@@ -45,5 +45,5 @@ function init() {
     controlCapas.addTo(map);
     controlEscala = L.control.scale();
     controlEscala.addTo(map);
-
+    map.addControl(osmGeocoder);
 }
