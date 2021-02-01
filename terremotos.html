@@ -32,6 +32,7 @@
             map.on("load", function () {
 
                 generarPeticionTerremotos();
+                addPopupToMap("terremotos");
 
             }); // fin load mapa
 
@@ -43,6 +44,7 @@
             map.on("moveend", function () {
 
                 generarPeticionTerremotos();
+                
             });
         } //fin init
 

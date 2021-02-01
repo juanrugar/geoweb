@@ -12,7 +12,8 @@ function terremotosGeonamesToGeoJSON(respuestaGeonames) {
                 "type": "Feature",
                 "properties": {
                     "magnitude": respuestaGeonames.earthquakes[i].magnitude,
-                    "datetime": respuestaGeonames.earthquakes[i].datetime
+                    "datetime": respuestaGeonames.earthquakes[i].datetime,
+                    "depth": respuestaGeonames.earthquakes[i].depth
                 },
                 "geometry": {
                     "type": "Point",
