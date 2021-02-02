@@ -1,5 +1,5 @@
 if (typeof console == "undefined") {
-	this.console = { log: function (msg) { /* do nothing since it would otherwise break IE */} };
+	this.console = { log: function (msg) { /* do nothing since it would otherwise break IE */ } };
 }
 
 
@@ -74,19 +74,19 @@ L.Control.OSMGeocoder = L.Control.extend({
 	},
 
 	/* helper functions for cordinate extraction */
-	_createSearchResult : function(lat, lon) {
+	_createSearchResult: function (lat, lon) {
 		//creates an position description similar to the result of a Nominatim search
 		var diff = 0.005;
 		var result = [];
 		result[0] = {};
-		result[0]["boundingbox"] = [parseFloat(lat)-diff,parseFloat(lat)+diff,parseFloat(lon)-diff,parseFloat(lon)+diff];
-		result[0]["class"]="boundary";
-		result[0]["display_name"]="Position: "+lat+" "+lon;
+		result[0]["boundingbox"] = [parseFloat(lat) - diff, parseFloat(lat) + diff, parseFloat(lon) - diff, parseFloat(lon) + diff];
+		result[0]["class"] = "boundary";
+		result[0]["display_name"] = "Position: " + lat + " " + lon;
 		result[0]["lat"] = lat;
 		result[0]["lon"] = lon;
 		return result;
 	},
-	_isLatLon : function (q) {
+	_isLatLon: function (q) {
 		//"lon lat" => xx.xxx x.xxxxx
 		var re = /(-?\d+\.\d+)\s(-?\d+\.\d+)/;
 		var m = re.exec(q);
@@ -99,8 +99,8 @@ L.Control.OSMGeocoder = L.Control.extend({
 		if (m != undefined) return m;
 		else return null;
 	},
-	_isLatLon_decMin : function (q) {
-		console.log("is LatLon?: "+q);
+	_isLatLon_decMin: function (q) {
+		console.log("is LatLon?: " + q);
 		//N 53° 13.785' E 010° 23.887'
 		//re = /[NS]\s*(\d+)\D*(\d+\.\d+).?\s*[EW]\s*(\d+)\D*(\d+\.\d+)\D*/;
 		re = /([ns])\s*(\d+)\D*(\d+\.\d+).?\s*([ew])\s*(\d+)\D*(\d+\.\d+)/i;
@@ -111,30 +111,28 @@ L.Control.OSMGeocoder = L.Control.extend({
 		// +- dec min +- dec min
 	},
 
-	_geocode : function (event) {
+	_geocode: function (event) {
 		L.DomEvent.preventDefault(event);
 		var q = this._input.value;
 		//try to find corrdinates
-		if (this._isLatLon(q) != null)
-		{
+		if (this._isLatLon(q) != null) {
 			var m = this._isLatLon(q);
-			console.log("LatLon: "+m[1]+" "+m[2]);
+			console.log("LatLon: " + m[1] + " " + m[2]);
 			//m = {lon, lat}
-			this.options.callback.call(this, this._createSearchResult(m[1],m[2]));
+			this.options.callback.call(this, this._createSearchResult(m[1], m[2]));
 			return;
 		}
-		else if (this._isLatLon_decMin(q) != null)
-		{
+		else if (this._isLatLon_decMin(q) != null) {
 			var m = this._isLatLon_decMin(q);
 			//m: [ns, lat dec, lat min, ew, lon dec, lon min]
-			var temp  = new Array();
+			var temp = new Array();
 			temp['n'] = 1;
 			temp['s'] = -1;
 			temp['e'] = 1;
 			temp['w'] = -1;
-			this.options.callback.call(this,this._createSearchResult(
-				temp[m[1]]*(Number(m[2]) + m[3]/60),
-				temp[m[4]]*(Number(m[5]) + m[6]/60)
+			this.options.callback.call(this, this._createSearchResult(
+				temp[m[1]] * (Number(m[2]) + m[3] / 60),
+				temp[m[4]] * (Number(m[5]) + m[6] / 60)
 			));
 			return;
 		}
@@ -142,19 +140,19 @@ L.Control.OSMGeocoder = L.Control.extend({
 		//and now Nominatim
 		//http://wiki.openstreetmap.org/wiki/Nominatim
 		console.log(this._callbackId);
-		window[("_l_osmgeocoder_"+this._callbackId)] = L.Util.bind(this.options.callback, this);
+		window[("_l_osmgeocoder_" + this._callbackId)] = L.Util.bind(this.options.callback, this);
 
 
 		/* Set up params to send to Nominatim */
 		var params = {
 			// Defaults
 			q: this._input.value,
-			json_callback : ("_l_osmgeocoder_"+this._callbackId++),
+			json_callback: ("_l_osmgeocoder_" + this._callbackId++),
 			format: 'json'
 		};
 
 		if (this.options.bounds && this.options.bounds != null) {
-			if( this.options.bounds instanceof L.LatLngBounds ) {
+			if (this.options.bounds instanceof L.LatLngBounds) {
 				params.viewbox = this.options.bounds.toBBoxString();
 				params.bounded = 1;
 			}
@@ -168,7 +166,7 @@ L.Control.OSMGeocoder = L.Control.extend({
 			if (typeof this.options.email == 'string') {
 				params.email = this.options.email;
 			}
-			else{
+			else {
 				console.log('email must be a string');
 			}
 		}

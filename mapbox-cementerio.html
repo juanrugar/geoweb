@@ -29,8 +29,9 @@
                 container: 'map',
                 style: 'mapbox://styles/juanrugar/ckkmimjff4smx17mqivtjzjoa',
                 center: [2.838, 41.972], // Cementiri de Girona
-                zoom: 16.79,
+                zoom: 17.5,
                 attributionControl: false,
+                pitch: 45,
                 hash: true
             });
             //controls
@@ -38,39 +39,25 @@
             map.addControl(new mapboxgl.NavigationControl());
 
             map.on('load', function () {
+
                 map.addSource("cementerio", {
                     type: "vector",
                     url: "mapbox://juanrugar.13ir6m2d" //poner mapbox://vuestro id
                 }); //fin map source
 
-                map.addSource("constru_cementerio", {
-                    type: "vector",
-                    url: "mapbox://juanrugar.7nivvkq6" //poner mapbox://vuestro id
-                }); //fin map source
-
-               
-                map.addLayer({
-                    id: "constru_cementerio",
-                    type: "circle",
-                    source: "constru_cementerio",
-                    'source-layer': "constru-cementerio-d2q8j7", //poner vuestro titulo capa
-                    paint: {
-                        'circle-color': "#0000ff",
-                        "circle-radius": 5
-                    }
-                });
-
                 map.addLayer({
                     id: "cementerio",
-                    type: "line",
+                    type: "fill-extrusion",
                     source: "cementerio",
                     'source-layer': "cementerio-6r40hj", //poner vuestro titulo capa
                     paint: {
-                        'line-color': "#00ff00",
-                        "line-width": 4
+                        "fill-extrusion-color": "#d8924f",
+                        "fill-extrusion-height": 2.5,
+                        "fill-extrusion-opacity": 0.9
                     }
-                });
-
+                }, 
+                //This attribute set the layer under the follwing layer from the MapBox style
+                "road-label-simple");
 
                 map.on('click', 'cementerio', function (e) {
 
@@ -95,33 +82,10 @@
                 map.on('mouseleave', 'cementerio', function () {
                     map.getCanvas().style.cursor = '';
                 });
+               
+            }); 
 
-                map.on('click', 'constru_cementerio', function (e) {
-
-                    var text = "";
-                    
-                    for (key in e.features[0].properties) {
-
-                        text += "<b>" + key + "</b>:" + e.features[0].properties[key] + "<br>";
-                    }
-                    new mapboxgl.Popup()
-                        .setLngLat(e.lngLat)
-                        .setHTML(text)
-                        .addTo(map);
-
-                });
-
-                map.on('mouseenter', 'constru_cementerio', function () {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-
-                map.on('mouseleave', 'constru_cementerio', function () {
-                    map.getCanvas().style.cursor = '';
-                });
-            });
-
-
-
+           
         } //End of init()
     </script>
 </head>
