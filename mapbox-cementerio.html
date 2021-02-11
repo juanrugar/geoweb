@@ -55,11 +55,31 @@
                         "fill-extrusion-height": 2.5,
                         "fill-extrusion-opacity": 0.9
                     }
-                }, 
-                //This attribute set the layer under the follwing layer from the MapBox style
-                "road-label-simple");
+                },
+                    //This attribute set the layer under the follwing layer from the MapBox style
+                    "road-label-simple");
 
-                map.on('click', 'cementerio', function (e) {
+                map.addSource("cemetery", {
+                    type: "vector",
+                    url: "mapbox://juanrugar.5917hnfu" //poner mapbox://vuestro id
+                }); //fin map source
+
+                map.addLayer({
+                    id: "cemetery",
+                    type: "circle",
+                    source: "cemetery",
+                    'source-layer': "cemetery_4326-d4u9e5", //poner vuestro titulo capa
+                    paint: {
+                        "circle-radius": 3,
+                        "circle-color": "#f0ee75",
+                        "circle-stroke-color": "#000000",
+                        "circle-stroke-width": 1                       
+                    }
+                },
+                    //This attribute set the layer under the following layer from the MapBox style
+                    "road-label-simple");
+
+                map.on('click', 'cemetery', function (e) {
 
                     var text = "";
                     // console.info(e); // similar al console.log()
@@ -75,17 +95,17 @@
 
                 });
 
-                map.on('mouseenter', 'cementerio', function () {
+                map.on('mouseenter', 'cemetery', function () {
                     map.getCanvas().style.cursor = 'pointer';
                 });
 
-                map.on('mouseleave', 'cementerio', function () {
+                map.on('mouseleave', 'cemetery', function () {
                     map.getCanvas().style.cursor = '';
                 });
-               
-            }); 
 
-           
+            });
+
+
         } //End of init()
     </script>
 </head>
