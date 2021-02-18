@@ -4,13 +4,15 @@
     <meta charset='utf-8' />
     <title>Arqueologia</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.min.js'></script>
-    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.css' type='text/css' />
+    <link rel='stylesheet'
+        href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.css'
+        type='text/css' />
     <link rel='stylesheet' href="css/arqueo.css">
-        
-    
+
+
 </head>
 
 <body onload="init()">
@@ -26,15 +28,16 @@
         var position = document.getElementById("position");
         function init() {
             mapboxgl.accessToken =
-                'pk.eyJ1IjoiZ2lzbWFzdGVybTIiLCJhIjoiY2plZHhubTQxMTNoYzMza3Rqa3kxYTdrOCJ9.53B1E6mKD_EQOVb2Y0-SsA';
+                'pk.eyJ1IjoianVhbnJ1Z2FyIiwiYSI6ImNranlpd2lqbzB5djQydW1sZTRvem9tdmgifQ.zvNvGIYji6wVpwjlnTHeJg';
 
             map = new mapboxgl.Map({
                 container: 'mapa',
-                style: 'mapbox://styles/mapbox/light-v10', //'mapbox://styles/juanrugar/ckl9n804n13eu17rz3p6nfvje'
+                style: 'mapbox://styles/juanrugar/ckl9n804n13eu17rz3p6nfvje',//'mapbox://styles/mapbox/light-v10', 
                 center: [-4.42695, 40.14044],//[2.16859, 41.3954], //this is Barna
                 zoom: 5.50,
                 pitch: 0,
-                bearing: 0
+                bearing: 0,
+                
             });
 
 
@@ -43,28 +46,28 @@
             map.addControl(new mapboxgl.NavigationControl());
 
             //geocoder control added
-            map.addControl(new MapboxGeocoder({accessToken: mapboxgl.accessToken, mapboxgl: mapboxgl}));
+            map.addControl(new MapboxGeocoder({ accessToken: mapboxgl.accessToken, mapboxgl: mapboxgl }));
 
             //requesting WMS service layer
             map.on('load', function () {
                 updatePosition();
                 map.addSource("wms-idearq", {
                     type: "raster",
-                    tiles: ["http://www.idearqueologia.org/idearq/wms?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=idearq_base&STYLES=&FORMAT=image/png&BGCOLOR=&TRANSPARENT=&CRS=EPSG:4258&BBOX={bbox-epsg-4258}&WIDTH=1020&HEIGHT=767"
-                        //"https://geoserveis.icgc.cat/icc_ortohistorica/wms/service?layers=ovaa10m&bbox={bbox-epsg-3857}&format=image/png&styles=&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=512&height=512",
+                    tiles: [
+//el servei WMS  es carrega al mapa pero surt com una imatge repetida...  
+                        'http://www.idearqueologia.org/idearq/wms?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=idearq_base&STYLES=idearq_base&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=true&CRS=crs:84&BBOX=-9.4,36.09999999910146,4.3,43.699999999057674&WIDTH=1000&HEIGHT=800'
                     ],
                     tileSize: 512,
-                    maxzoom: 19,
-                    minZoom: 7.5,
+                                     
                 });
 
                 //  adding layer
-                map.addLayer({
+                map.addLayer(
+                    {
                     id: "wms-idearq",
                     source: "wms-idearq",
                     type: "raster",
-                    maxzoom: 5.00
-
+                    maxzoom: 18
                 });
             })
 
@@ -75,7 +78,7 @@
             var updatePosition = function () {
                 var settings = 'center: [' + map.getCenter().lng.toFixed(5) + ', ' + map.getCenter().lat.toFixed(5) + '],\n' +
                     'zoom: ' + map.getZoom().toFixed(2) + ',\n' +
-                    'bearing: ' + map.getBearing().toFixed(2) + '\n'+
+                    'bearing: ' + map.getBearing().toFixed(2) + '\n' +
                     'pitch: ' + map.getPitch().toFixed(2) + ',\n';
 
                 position.innerText = settings;
@@ -85,7 +88,7 @@
 
         } // final init
 
-        
+
     </script>
 </body>
 
