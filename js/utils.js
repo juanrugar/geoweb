@@ -23,7 +23,7 @@ var popup = new mapboxgl.Popup({
 
 function addPopupToMap(nombreCapa) {
 
-    map.on('mousemove', nombreCapa, function (e) {
+    map.on('click', nombreCapa, function (e) {
 
         var text = "";
         //console.info(e);

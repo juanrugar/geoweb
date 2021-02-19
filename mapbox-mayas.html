@@ -2,15 +2,20 @@
 
 <head>
     <meta charset='utf-8' />
-    <title>Arqueologia</title>
+    <title>Tierras Mayas</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
-    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.min.js'></script>
+    <script
+        src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.min.js'></script>
     <link rel='stylesheet'
         href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.css'
         type='text/css' />
+        <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css" type="text/css">
     <link rel='stylesheet' href="css/arqueo.css">
+    <script src="js/utils.js"></script>
+    <script src="js/archaeoSites.js"></script>
 
 
 </head>
@@ -20,24 +25,24 @@
     <div id="mapa" class="map"></div>
     <div id="target"><img src="images/target.svg" alt=""></div>
     <div id="position"></div>
-    
+
 
     <script>
         //Añadir vuestor token!!
         var map;
         var position = document.getElementById("position");
+        
         function init() {
             mapboxgl.accessToken =
                 'pk.eyJ1IjoianVhbnJ1Z2FyIiwiYSI6ImNranlpd2lqbzB5djQydW1sZTRvem9tdmgifQ.zvNvGIYji6wVpwjlnTHeJg';
 
             map = new mapboxgl.Map({
                 container: 'mapa',
-                style: 'mapbox://styles/juanrugar/ckl9n804n13eu17rz3p6nfvje',//'mapbox://styles/mapbox/light-v10', 
-                center: [-4.42695, 40.14044],//[2.16859, 41.3954], //this is Barna
-                zoom: 5.50,
-                pitch: 0,
-                bearing: 0,
-                
+                style: 'mapbox://styles/juanrugar/cklb64gd31uvg17qu0a43nlf2', 
+                center: [-89.47651, 16.95207],
+                zoom: 8.14,
+                bearing: 0.00,
+                pitch: 0.00
             });
 
 
@@ -48,26 +53,22 @@
             //geocoder control added
             map.addControl(new MapboxGeocoder({ accessToken: mapboxgl.accessToken, mapboxgl: mapboxgl }));
 
-            //requesting WMS service layer
-            map.on('load', function () {
-                updatePosition();
-                map.addSource("wms-idearq", {
-                    type: "raster",
-                    tiles: [
-                        'http://www.idearqueologia.org/idearq/wms?SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=idearq_base&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=512&HEIGHT=512'
-                    ],
-                    tileSize: 512,
-                                     
-                });
+            var directions = new MapboxDirections({
+                accessToken: mapboxgl.accessToken,
+                unit: 'metric',
+                profile: 'mapbox/driving'
+            });
 
-                //  adding layer
-                map.addLayer(
-                    {
-                    id: "wms-idearq",
-                    source: "wms-idearq",
-                    type: "raster",
-                    maxzoom: 18
-                });
+            map.addControl(directions,'bottom-left');
+            
+            map.on('load', function () {
+                //geocoder
+                updatePosition();
+                //archaeological sites location
+                addSites();
+                //popup with site data
+                addPopupToMap("siteMap");
+
             })
 
             map.on("click", function () {
@@ -83,10 +84,7 @@
                 position.innerText = settings;
             };
 
-            map.on("click", function(){
-                getSiteData ()
-            });
-
+           
         } // final init
 
 
