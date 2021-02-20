@@ -1,9 +1,8 @@
+
 var layerFarmacias;
 var urlFarmacias = "datos/farmacias.geojson";
 
-function addDatosFarmacias() {
-
-    var puntosCluster = L.markerClusterGroup();
+function addDatosFarmacias() { 
 
         layerFarmacias  = new L.GeoJSON.AJAX(urlFarmacias, {
             onEachFeature: function (feature, layer) {
@@ -26,25 +25,9 @@ function addDatosFarmacias() {
             }
         }).addTo(map);
 
-        map.setView([41.399733,2.168598],13);
-        // controlCapas.addOverlay(layerFarmacias,"Farmacias");
+        map.setView([41.399733,2.168598],17);
 
-        controlCapas.addOverlay(layerFarmacias,"Farmacias");
 
-        controlCapas.addOverlay(puntosCluster,"Cluster");
-        var searchControl = new L.Control.Search({
-            layer: layerFarmacias,
-            initial:false,
-            propertyName: 'EQUIPAMENT',
-            circleLocation: true,
-            moveToLocation: function (latlng) {
-                map.setView(latlng, 17);
-            }
-        });
-
-        searchControl.on('search:locationfound', function(e) {
-            e.layer.openPopup();
-        });
-        map.addControl(searchControl);
+        
 
 }//fin funcion

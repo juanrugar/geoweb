@@ -6,11 +6,13 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
-    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.min.js'></script>
+    <script
+        src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.min.js'></script>
     <link rel='stylesheet'
         href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.css'
         type='text/css' />
     <link rel='stylesheet' href="css/arqueo.css">
+    <script src="datos/gva-arqueologia-coput.geojson"></script>
 
 
 </head>
@@ -20,12 +22,13 @@
     <div id="mapa" class="map"></div>
     <div id="target"><img src="images/target.svg" alt=""></div>
     <div id="position"></div>
-    
+
 
     <script>
         //Añadir vuestor token!!
         var map;
         var position = document.getElementById("position");
+        var url = 'datos/gva-arqueologia-coput.geojson';
         function init() {
             mapboxgl.accessToken =
                 'pk.eyJ1IjoianVhbnJ1Z2FyIiwiYSI6ImNranlpd2lqbzB5djQydW1sZTRvem9tdmgifQ.zvNvGIYji6wVpwjlnTHeJg';
@@ -37,7 +40,7 @@
                 zoom: 5.50,
                 pitch: 0,
                 bearing: 0,
-                
+
             });
 
 
@@ -57,20 +60,167 @@
                         'http://www.idearqueologia.org/idearq/wms?SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=idearq_base&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=512&HEIGHT=512'
                     ],
                     tileSize: 512,
-                                     
+
                 });
 
                 //  adding layer
-                map.addLayer(
-                    {
+                map.addLayer({
                     id: "wms-idearq",
                     source: "wms-idearq",
                     type: "raster",
                     maxzoom: 18
                 });
+
+                //WMTS service ICV 1956-57 ortos 
+                /*                map.addSource("orto-hist", {
+                                    type: "raster",
+                                    tiles: [
+                                map.addSource("orto-hist", {
+                                        'http://http://terramapas.icv.gva.es/odcv10_etrs89h30_1956_3857/wmts?SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=idearq_base&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=512&HEIGHT=512'
+                                    ],
+                                    tileSize: 512,
+                                                     
+                                });
+                
+                                //  adding layer
+                                map.addLayer({
+                                    id: "orto-hist",
+                                    source: "orto-hist",
+                                    type: "raster",
+                                    maxzoom: 18
+                                });
+                               */
+
+                map.addSource('gva-sites',
+                    {
+                        type: 'geojson',
+                        data: url,
+                        cluster: true,
+                        clusterMaxZoom: 14, // Max zoom to cluster points on
+                        clusterRadius: 50
+
+                    });
+
+                map.addLayer({
+                    id: 'clusters',
+                    type: 'circle',
+                    source: 'gva-sites',
+                    filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#51bbd6',
+                            10,
+                            '#f1f075',
+                            30,
+                            '#f28cb1'
+                        ],
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            20,
+                            10,
+                            30,
+                            30,
+                            40
+                        ]
+                    }
+                });
+                
+                map.addLayer({
+                    id: 'cluster-count',
+                    type: 'symbol',
+                    source: 'gva-sites',
+                    filter: ['has', 'point_count'],
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12
+                    }
+                });
+
+                map.addLayer({
+                    id: 'unclustered-point',
+                    type: 'circle',
+                    source: 'gva-sites',
+                    filter: ['!', ['has', 'point_count']],
+                    paint: {
+                        'circle-color': '#11b4da',
+                        'circle-radius': 4,
+                        'circle-stroke-width': 1,
+                        'circle-stroke-color': '#fff'
+                    }
+                });
+
+                map.on('click', 'unclustered-point', function (e) {
+
+                    var text = "";
+                    // console.info(e); // similar al console.log()
+                    //console.log(e.features[0]);
+                    for (key in e.features[0].properties) {
+
+                        text += "<b>" + key + "</b>:" + e.features[0].properties[key] + "<br>";
+                    }
+                    new mapboxgl.Popup()
+                        .setLngLat(e.lngLat)
+                        .setHTML(text)
+                        .addTo(map);
+
+                });
+
+                map.on('mouseenter', 'clusters', function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseleave', 'clusters', function () {
+                    map.getCanvas().style.cursor = '';
+                });
+
+                /* single circle layer
+                map.addLayer({
+                    'id': 'gva-sites',
+                    'type': 'circle',
+                    'source': 'gva-sites',
+                    'layout': {
+                    },
+                    'paint': {
+                        'circle-color': 'darkred',
+                        'circle-stroke-color': 'black',
+                        'circle-radius': 4
+                    }
+                });
+                
+
+                map.on('click', 'gva-sites', function (e) {
+
+                    var text = "";
+                    // console.info(e); // similar al console.log()
+                    //console.log(e.features[0]);
+                    for (key in e.features[0].properties) {
+
+                        text += "<b>" + key + "</b>:" + e.features[0].properties[key] + "<br>";
+                    }
+                    new mapboxgl.Popup()
+                        .setLngLat(e.lngLat)
+                        .setHTML(text)
+                        .addTo(map);
+
+                });
+
+                map.on('mouseenter', 'gva-sites', function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseleave', 'gva-sites', function () {
+                    map.getCanvas().style.cursor = '';
+                });     
+                END OF siMPLE CIRCLE */
+
             })
 
-            map.on("click", function () {
+
+            map.on("moveend", function () {
                 updatePosition()
             });
 
@@ -83,9 +233,7 @@
                 position.innerText = settings;
             };
 
-            map.on("click", function(){
-                getSiteData ()
-            });
+
 
         } // final init
 
