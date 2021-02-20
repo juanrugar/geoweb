@@ -54,6 +54,24 @@
             //requesting WMS service layer
             map.on('load', function () {
                 updatePosition();
+
+                //WMTS service ICV 1956-57 ortos 
+                map.addSource("orto-hist", {
+                    type: "raster",
+                    tiles: [
+                   "https://geoserveis.icgc.cat/icc_ortohistorica/wms/service?layers=ovab5m&bbox={bbox-epsg-3857}&format=image/png&styles=&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857&transparent=true&width=512&height=512"
+                    ],
+                    tileSize: 512
+                });
+
+                //  adding layer
+                map.addLayer({
+                    id: "orto-hist",
+                    source: "orto-hist",
+                    type: "raster",
+                    maxzoom: 18
+                });
+
                 map.addSource("wms-idearq", {
                     type: "raster",
                     tiles: [
@@ -71,26 +89,7 @@
                     maxzoom: 18
                 });
 
-                //WMTS service ICV 1956-57 ortos 
-                /*                map.addSource("orto-hist", {
-                                    type: "raster",
-                                    tiles: [
-                                map.addSource("orto-hist", {
-                                        'http://http://terramapas.icv.gva.es/odcv10_etrs89h30_1956_3857/wmts?SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=idearq_base&FORMAT=image/png&BGCOLOR=0xFFFFFF&TRANSPARENT=true&SRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=512&HEIGHT=512'
-                                    ],
-                                    tileSize: 512,
-                                                     
-                                });
                 
-                                //  adding layer
-                                map.addLayer({
-                                    id: "orto-hist",
-                                    source: "orto-hist",
-                                    type: "raster",
-                                    maxzoom: 18
-                                });
-                               */
-
                 map.addSource('gva-sites',
                     {
                         type: 'geojson',
