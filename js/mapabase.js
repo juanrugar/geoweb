@@ -1,9 +1,8 @@
-var map, osm, controlCapas, osmGeocoder;
-
+var map, osm, controlCapas, controlEscala;
 function init() {
     map = L.map('map', {
-        center: [42.6863, 2.8382],
-        zoom: 7
+        center: [41.409042, 2.181242],
+        zoom: 12
     });
 
     osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -43,7 +42,9 @@ function init() {
 
     controlCapas = L.control.layers(mapaBase, null, { collapsed: false });
     controlCapas.addTo(map);
+
     controlEscala = L.control.scale();
     controlEscala.addTo(map);
-    map.addControl(osmGeocoder);
+
+    //map.addControl(osmGeocoder);
 }

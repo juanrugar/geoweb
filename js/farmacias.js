@@ -13,7 +13,7 @@ function addDatosFarmacias() {
                 layer.bindPopup(popupContent);
             },
             pointToLayer: function (feature, latlng) {
-                puntosCluster.addLayer(L.marker(latlng));
+               // puntosCluster.addLayer(L.marker(latlng));
                 return L.circleMarker(latlng, {
                     radius: 6,
                     fillColor: "#00ff00",
@@ -25,9 +25,24 @@ function addDatosFarmacias() {
             }
         }).addTo(map);
 
-        map.setView([41.399733,2.168598],17);
+        map.setView([41.399733,2.168598], 13);
 
+        //adding leaflet-search CONTROLS
 
+        var searchControl = new L.Control.Search({
+            layer: layerFarmacias,
+            initial: false,
+            propertyName: 'EQUIPAMENT',
+            circleLocation: true,
+            moveToLocation: function (latlng) {
+                map.setView(latlng, 17);
+            } 
+        });
+
+        searchControl.on('search:locationfound', function(e) {
+            e.layer.openPopup();
+        });
+        map.addControl(searchControl);
         
 
 }//fin funcion
