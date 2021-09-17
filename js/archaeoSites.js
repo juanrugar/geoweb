@@ -1,6 +1,6 @@
 
 function addSites() {
-
+    //PLB PhD Thesis archaeological record
     var url = 'datos/170509AE_v5.geojson';
     map.addSource('sites', { type: 'geojson', data: url });
 
